@@ -1,7 +1,7 @@
-SENDER_EMAIL = 'reportmath@gmail.com'
-TO_EMAIL = 'crow.lauren@unionps.org'
-SKEY = 'dddwdwddwdwwwwwww2'
-EMAILPW = 'VegJ8c-WX3-5'
+SENDER_EMAIL = ''
+TO_EMAIL = ''
+SKEY = ''
+EMAILPW = ''
 
 from flask import Flask, request, render_template, send_file, redirect, url_for, make_response, session
 from apscheduler.schedulers.background import BackgroundScheduler
