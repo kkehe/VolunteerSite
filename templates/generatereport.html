@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet"> 
+    <title>Report Generator</title>
+    <style>
+
+        body {
+            height: 100vh;
+            font-family: 'Comfortaa';
+            color: white;
+            background: #1f1f1f;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        form {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #toprow {
+            width: 100vw;
+            display: flex;
+            flex-direction: row;
+            margin: 0;
+            margin-top: 6%;
+            margin-bottom: 5%;
+            align-items: center;
+            justify-content: center;
+        }
+
+        input[type=submit] {
+            background-color: #358DF0;
+            color: white;
+            border-radius: 2.5vw;
+            border: none;
+            transition: all 0.2s;
+            padding: 1%;
+            margin: 1.7%;
+            font-size: 2vw;
+            align-self: center;
+            width: 40%;
+            height: 15%;
+            text-align: center;
+            font-family: 'Comfortaa';
+            line-height: 0;
+            margin-top: -2%;
+        }
+
+        input[type=submit]:hover {
+            transform: scale(1.02);
+            background-color: #509AF0;
+        }
+
+        input[type=text] {
+            padding: 1%;
+            width: 30%;
+            height: 20%;
+            background-color: white;
+            color: #1f1f1f;
+            border: 0.4vw solid #509af0;
+            border-radius: 0.6vw;
+            font-size: 2vw;
+            outline: none;
+            transition: transform 0.3s, border-color 1s, color 1s;
+            margin-left: 1.5%;
+            padding: 1.5%;
+            margin-top: 0.5%;
+        }
+
+        input[type=text]:focus {
+            transform: scale(1.02);
+        }
+
+        #date_range {
+            margin-left: 5%;
+            width: 25%;
+            height: 60%;
+            font-family: Comfortaa;
+            font-size: 1vw;
+            padding: 0.5%;
+            background-color: white;
+            outline: none;
+            border: 0.4vw solid #509af0;
+            border-radius: 0.6vw;
+            transition: transform 0.3s, border-color 1s, color 1s;
+        }
+
+        #date_range:focus {
+            transform: scale(1.02);
+        }
+
+        option {
+            font-family: Helvetica;
+        }
+
+        section {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .blue {
+            background: #358DF0;
+        }
+
+        .curve {
+            position: absolute;
+            height: 65px;
+            width: 100%;
+            bottom: 0;
+            text-align: center;
+        }
+
+        .curve::before {
+            content: '';
+            display: block;
+            position: absolute;
+            border-radius: 100% 50%;
+            width: 55%;
+            height: 100%;
+            transform: translate(85%, 60%);
+            background-color: #1F1F1F;
+        }
+
+        .curve::after {
+            content: '';
+            display: block;
+            position: absolute;
+            border-radius: 100% 50%;
+            width: 55%;
+            height: 100%;
+            background-color: #358DF0;
+            transform: translate(-4%, 40%);
+            z-index: -1;
+        }
+
+        h1 {
+            padding-top: 2%;
+            padding-bottom: 1%;
+            font-size: 3.3vw;
+            margin-top: 0;
+        }
+
+        .switch {
+            margin: 1.5%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #bbb;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+        input:checked + .slider {
+            background-color: #358DF0;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #358DF0;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        } 
+
+        #excelswitchlabel {
+            position: absolute;
+            margin: 1.5%;
+            bottom: 5px;
+            right: 70px;
+            font-size: 20px;
+        }
+
+        #contact {
+            position: absolute;
+            padding-left: 0.8%;
+            bottom: 0;
+            font-size: 0.8vw;
+            text-align: left;
+        }
+
+        input[type="date"] {
+            margin-left: 5%;
+            outline: none;
+            width: 90%;
+            height: 35%;
+            font-family: Comfortaa;
+            font-size: 2vw;
+            border: 0.4vw solid #509af0;
+            border-radius: 0.6vw;
+            transition: transform 0.3s, border-color 1s, color 1s;
+            padding: 1%;
+            margin-bottom: 3%;
+        }
+
+        input[type="date"]:focus {
+            transform: scale(1.02);
+        }
+
+        #start_date_div {
+            margin-left: 5%;
+            height: 20vh;
+            width: 20vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #end_date_div {
+            height: 20vh;
+            width: 20vw;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .datelabel {
+            margin-bottom: 1%;
+            margin-left: 7%;
+            font-size: 1.5vw;
+        }
+
+    </style>
+</head>
+<body>
+    <form method="POST">
+            <p id="excelswitchlabel">Excel Spreadsheet</p>
+        <label class="switch" id="excelswitch">
+            <input type="checkbox" name="excelcheckbox">
+            <span class="slider round"></span>
+        </label>
+        <section class="blue">
+            <h1>Generate a Math Report</h1>
+            <div class="curve"></div>
+        </section>
+        <div id="toprow">
+            <input type="text" placeholder="Student name (optional)" name="name_input" autocomplete="off">
+            <!-- <label for="date_range">Choose a date range:</label> -->
+            <div id="start_date_div">
+                <p class="datelabel">Start Date</p>
+                <input type="date" name="start_date" id="start_date">
+            </div>
+            <div id="end_date_div">
+                <p class="datelabel">End Date</p>
+                <input type="date" name="end_date" id="end_date">
+            </div>
+        </div>
+        <input type="submit" name="submit_button" value="Generate">
+        <p id="contact">Kayden Kehe | 2022<br>Contact me at kaydenkehe05@gmail.com</p>
+    </form>
+</body>
+</html>

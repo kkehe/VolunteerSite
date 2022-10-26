@@ -1,0 +1,260 @@
+<!--
+The curve was taken from here:
+https://www.youtube.com/watch?v=lPJVi797Uy0&t=72s 
+https://github.com/fireship-io/wavy-curvey-blobby-website
+-->
+
+<!--
+The code for the switch can be found here:
+https://www.w3schools.com/howto/howto_css_switch.asp
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel='shortcut icon' href="{{ url_for('static', filename='favicon.ico') }}">
+  <title>Math PDF Generator</title>
+
+  <!-- Get Comfortaa font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet"> 
+  <style>
+
+    h1 {
+      padding-top: 2%;
+      padding-bottom: 1%;
+      font-size: 3.3vw;
+      margin-top: 0;
+    }
+
+    #misc {
+        height: 100vh;
+        width: 100vw;
+    }
+
+    #contact {
+        padding-left: 0.8%;
+        position: absolute;
+        bottom: 0;
+        font-size: 0.8vw;
+        text-align: left;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Comfortaa';
+      color: white;
+      background: #1f1f1f;
+      overflow: hidden;
+    }
+
+    section {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .blue {
+      background: #358DF0;
+    }
+
+    .curve {
+      position: absolute;
+      height: 65px;
+      width: 100%;
+      bottom: 0;
+      text-align: center;
+    }
+
+    .curve::before {
+      content: '';
+      display: block;
+      position: absolute;
+      border-radius: 100% 50%;
+      width: 55%;
+      height: 100%;
+      transform: translate(85%, 60%);
+      background-color: #1F1F1F;
+    }
+
+    .curve::after {
+      content: '';
+      display: block;
+      position: absolute;
+      border-radius: 100% 50%;
+      width: 55%;
+      height: 100%;
+      background-color: #358DF0;
+      transform: translate(-4%, 40%);
+      z-index: -1;
+    }
+
+    input[type=submit] {
+          background-color: #358DF0;
+          color: white;
+          border-radius: 2.5vw;
+          border: none;
+          transition: all 0.2s;
+          padding: 2%;
+          margin: 1.7%;
+          font-size: 2vw;
+          align-self: center;
+          width: 40%;
+          height: 30%;
+          text-align: center;
+          font-family: 'Comfortaa';
+      }
+
+      input[type=submit]:hover {
+          transform: scale(1.02);
+          background-color: #509AF0;
+      }
+
+      #buttons {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        padding-top: 5%;
+        overflow: hidden;
+      }
+
+      #buttons_top {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        width: 100vw;
+      }
+
+      #buttons_top {
+        display: flex;
+        justify-content: center;
+        flex-direction: row;
+        width: 100vw;
+      }
+
+      .switch {
+        margin: 1.5%;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 60px;
+        height: 34px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #bbb;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .slider {
+        background-color: #358DF0;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #358DF0;
+      }
+
+      input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      } 
+
+      #fontswitchlabelsplit {
+        position: absolute;
+        margin: 1.5%;
+        bottom: 5px;
+        right: 70px;
+        font-size: 20px;
+      }
+
+      #fontswitchlabelsubtraction {
+        position: absolute;
+        margin: 1.5%;
+        bottom: 45px;
+        right: 70px;
+        font-size: 20px;
+      }
+
+      #subtractionswitch {
+        bottom: 40px;
+      }
+
+  </style>
+</head>
+<body>
+  <form method='POST'>
+    <section class="blue">
+      <h1>Generate a Math Sheet</h1>
+      <div class="curve"></div>
+    </section>
+
+    <section>
+      <div id="buttons">
+        <div id="buttons_top">
+          <input type='submit' name="submit_button" value="Numbers 0 - 5">
+          <input type='submit' name="submit_button" value="Numbers 0 - 9">
+        </div>
+        <div id="buttons_top">
+          <input type='submit' name="submit_button" value="Numbers 10 - 99">
+          <input type='submit' name="submit_button" value="Numbers 100 - 999">
+        </div>
+      </div>
+    </section>
+
+    <div id="misc">
+      <!-- Subtraction switch -->
+      <p id="fontswitchlabelsubtraction">Subtraction</p>
+      <label class="switch" id="subtractionswitch">
+        <input type="checkbox" name="subtractioncheckbox">
+        <span class="slider round"></span>
+      </label>
+      <!-- Split font switch -->
+      <p id="fontswitchlabelsplit">Split Fonts</p>
+      <label class="switch" id="splitswitch">
+        <input type="checkbox" name="splitcheckbox">
+        <span class="slider round"></span>
+      </label>
+      <p id="contact">Kayden Kehe | 2022<br>Contact me at kaydenkehe05@gmail.com</p>
+    </div>
+  </form>
+</body>
+</html>

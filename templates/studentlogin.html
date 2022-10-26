@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Login</title>
+    <style>
+
+        @font-face { font-family: TouchFont; src: url("{{ url_for('static', filename='KGTeacherHelpersMono.ttf') }}"); }
+
+        body {
+        margin: 0;
+        font-family: 'Calibri';
+        color: black;
+        background: white;
+        overflow: hidden;
+        }
+
+        form {
+            margin-top: 5%;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type=text] {
+                padding: 1%;
+                width: 50%;
+                height: 45%;
+                background-color: white;
+                color: black;
+                border: 0.4vw solid black;
+                border-radius: 0.6vw;
+                font-size: 5vw;
+                outline: none;
+                transition: transform 0.3s, border-color 1s, color 1s;
+                margin-left: 1.5%;
+                padding: 2.5%;
+            }
+
+        input[type=text]:focus {
+            transform: scale(1.02);
+        }
+
+        #submit_button:hover {
+            transform: scale(1.08);
+        }
+
+        #submit_button {
+            display: block;
+            background-color: black;
+            color: white;
+            border-radius: 50%;
+            border: 4px solid black;
+            font-family: Touchfont;
+            font-size: 10vw;
+            transition: all 0.3s;
+            width: 7vw;
+            height: 7vw;
+            margin-left: 3%;
+            line-height: 0;
+        }
+
+        #input_label {
+            font-size: 4.5vw;
+            margin: 0;
+            margin-right: 9%;
+        }
+
+        #user_input_div {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            margin-top: -0.5%;
+        }
+
+        #teacherlink {
+            font-size: 1vw;
+            position: absolute;
+            left: 0.5%;
+            bottom: 0.5%;
+        }
+
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <a href="/teacher/login" id="teacherlink">Teacher Portal</a>
+        <p id="input_label">Enter Your Name:</p>
+        <div id="user_input_div">
+            <input type="text" name="user_name" autocomplete="off">
+            <input type="submit" name="submit_button" value=">" id="submit_button">
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Teacher Login</title>
+    <style>
+
+        @font-face { font-family: TouchFont; src: url("{{ url_for('static', filename='KGTeacherHelpersMono.ttf') }}"); }
+
+        body {
+            margin: 0;
+            font-family: 'Calibri';
+            color: white;
+            background: #1f1f1f;
+            overflow: hidden;
+        }
+
+        form {
+            margin-top: 5%;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type=password] {
+                padding: 1%;
+                width: 50%;
+                height: 45%;
+                background-color: #1f1f1f;
+                color: white;
+                border: 0.4vw solid white;
+                border-radius: 0.6vw;
+                font-size: 5vw;
+                outline: none;
+                transition: transform 0.3s, border-color 1s, color 1s;
+                margin-left: 1.5%;
+                padding: 2.5%;
+            }
+
+            input[type=password]:focus {
+                transform: scale(1.02);
+            }
+
+            #submit_button:hover {
+                transform: scale(1.08);
+            }
+
+            #submit_button {
+                display: block;
+                background-color: white;
+                color: #1f1f1f;
+                border-radius: 50%;
+                border: 4px solid white;
+                font-family: Touchfont;
+                font-size: 10vw;
+                transition: all 0.3s;
+                width: 7vw;
+                height: 7vw;
+                margin-left: 3%;
+                line-height: 0;
+            }
+
+            #input_label {
+                font-size: 4.5vw;
+                margin: 0;
+                margin-right: 9%;
+            }
+
+            #user_input_div {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                margin-top: -0.5%;
+            }
+
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <p id="input_label">Enter Password:</p>
+        <div id="user_input_div">
+            <input type="password" name="password" autocomplete="off">
+            <input type="submit" name="submit_button" value=">" id="submit_button">
+        </div>
+    </form>
+</html>

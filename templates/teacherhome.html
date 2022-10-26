@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Teacher Home</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600&display=swap" rel="stylesheet"> 
+    <style>
+
+        body {
+            height: 100vh;
+            font-family: 'Comfortaa';
+            color: white;
+            background: #1f1f1f;
+            overflow: hidden;
+        }
+
+        input[type=submit] {
+            background-color: #358DF0;
+            color: white;
+            border-radius: 2.5vw;
+            border: none;
+            transition: all 0.2s;
+            padding: 2%;
+            margin: 1.7%;
+            font-size: 2vw;
+            align-self: center;
+            width: 60%;
+            height: 15%;
+            text-align: center;
+            font-family: 'Comfortaa';
+            line-height: 0;
+        }
+
+        input[type=submit]:hover {
+            transform: scale(1.02);
+            background-color: #509AF0;
+        }
+
+        form {
+            width: 100%;
+            height: 100%;
+            margin: 1%;
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            margin-top: 5%;
+        }
+
+        #contact {
+            position: absolute;
+            padding-left: 0.8%;
+            bottom: 0;
+            left: 0;
+            font-size: 0.8vw;
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+    <form method="POST">
+        <input type="submit" name='submit_button' value="Worksheet Generator">
+        <input type="submit" name='submit_button' value="Report Generator">
+        <p id="contact">Kayden Kehe | 2022<br>Contact me at kaydenkehe05@gmail.com</p>
+    </form>
+</body>
+</html>

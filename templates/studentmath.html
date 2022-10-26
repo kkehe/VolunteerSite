@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='shortcut icon' href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>Math</title>
+    <style>
+
+        @font-face { font-family: TouchFont; src: url("{{ url_for('static', filename='KGTeacherHelpersMono.ttf') }}"); }
+        @font-face { font-family: Dotless; src: url("{{ url_for('static', filename='KGTeacherHelpersMonoNodot.ttf') }}"); }
+
+        :root {
+            --bgColor: var(--bgColor);
+            --inputMargin: 10%;
+        }
+
+        body {
+            background-color: var(--bgColor);
+            overflow: hidden;
+            transition: opacity 0.2s;
+            opacity: 0;
+        }
+
+        form {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        input[type=text] {
+            text-align: center;
+            padding: 0.1%;
+            width: 4%;
+            height: 5%;
+            background-color: var(--bgColor);
+            color: black;
+            border: 0.5vw solid black;
+            border-radius: 0.6vw;
+            font-family: TouchFont;
+            font-size: 7vw;
+            outline: none;
+            transition: transform 0.3s, border-color 1s, color 1s;
+            margin-left: 0.8%;
+        }
+
+        input[type=text]:focus {
+            transform: scale(1.02);
+        }
+
+        #submit_button:hover {
+            transform: scale(1.08);
+        }
+
+        #main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #submit_button {
+            display: block;
+            background-color: black;
+            color: var(--bgColor);
+            border-radius: 50%;
+            border: 4px solid black;
+            font-family: TouchFont;
+            font-size: 10vw;
+            transition: all 0.3s;
+            width: 6vw;
+            height: 6vw;
+            margin: 3%;
+            margin-bottom: 4%;
+            line-height: 0;
+        }
+
+        #operand1, #operation, #operand2 {
+            font-size: 10vw;
+            font-family: TouchFont;
+            color: black;
+            margin: 0;
+        }
+
+        #operand1 {
+            margin-left: 4vw;
+            margin-bottom: -3%;
+            margin-top: 2%;
+        }
+
+        #operand2 {
+            margin-bottom: -12%;
+        }
+
+        #underline {
+            font-size: 10vw;
+            font-family: Helvetica;
+            color: black;
+            margin: 0;
+        }
+
+        #inputdiv {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            margin-top: 1%;
+            margin-left: var(--inputMargin);
+        }
+
+        #end {
+            width: 100vw;
+            height: 100vh;
+            visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #endtext {
+            font-size: 4.5vw;
+            font-family: Calibri;
+            color: black;
+            text-align: center;
+            margin: 1%;
+        }
+
+        #home_button:hover {
+            transform: scale(1.02);
+        }
+
+        #home_button {
+            background-color: black;
+            color: var(--bgColor);
+            border-radius: 2vw;
+            border: 4px solid black;
+            font-size: 4vw;
+            transition: all 0.3s;
+            width: 40%;
+            height: 15%;
+            line-height: 0;
+        }
+
+    </style>
+</head>
+<body id="body">
+    <div id="main">
+        <p id="operand1"><span id="operand1_span1"></span><span id="operand1_span2"></span><span id="operand1_span3"></span></p>
+        <p id="operand2"><span id="operand2_operationspan"></span><span id="operand2_span1"></span><span id="operand2_span2"></span><span id="operand2_span3"></span></p>
+        <p id="underline">____</p>
+        <div id="inputdiv">
+            <!-- The oninput bit was taken from here: https://stackoverflow.com/questions/469357/html-text-input-allow-only-numeric-input -->
+            <input type="text" name="num_input", id="num_input_1" autocomplete="off", oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <input type="text" name="num_input", id="num_input_2" autocomplete="off", oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <input type="text" name="num_input", id="num_input_3" autocomplete="off", oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <input type="text" name="num_input", id="num_input_4" autocomplete="off", oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <input type="button" id="submit_button" value=">", onClick="submitClick()">
+        </div>
+    </div>
+    <div id="end">
+        <p id="endtext"></p>
+        <input type="button" onclick="location.href='/student/home';" value="Home" id="home_button">
+    </div>
+</body>
+</html>
+
+<script>
+
+    // Get cookie values
+    var numRange = '{{ numrange }}';
+    var subtraction = '{{ subtraction }}';
+    var splitFont = '{{ split }}';
+    var bgOption = '{{ bg }}';
+    var username = '{{ username }}';
+
+    var numRangeList = [0, 0]
+    if (numRange == '1') {
+        numRangeList[0] = 0;
+        numRangeList[1] = 6;
+    } else if (numRange == '2') {
+        numRangeList[0] = 0;
+        numRangeList[1] = 10;
+    } else if (numRange == '3') {
+        numRangeList[0] = 10;
+        numRangeList[1] = 100;
+    } else if (numRange == '4') {
+        numRangeList[0] = 100;
+        numRangeList[1] = 1000;
+    }
+
+    operation = '';
+    if (subtraction == '0') {
+        operation = '+';
+    } else if (subtraction == '1') {
+        operation = '-';
+    }
+
+    var operand1 = 0;
+    var operand2 = 0;
+    var operand1_split = [];
+    var operand2_split = [];
+    var questionsAnswered = 0;
+    var questionsCorrect = 0;
+    var postURL = '/student/math/postdata'
+    var startTime = 0;
+
+    // Get random integer from [min, max)
+    function randRange(min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    // Load a new question
+    function nextQuestion() {
+        document.getElementById("body").style.opacity = 0; // Make everything invisible
+        if (questionsAnswered != 10) {
+            setTimeout(() => {
+                operand1 = randRange(numRangeList[0], numRangeList[1]);
+                operand2 = randRange(numRangeList[0], numRangeList[1]);
+
+                // Make sure the answer is never negative
+                if (operation == '-') {
+                    if (operand2 > operand1) {
+                        var temp = operand1.valueOf();
+                        operand1 = operand2.valueOf();
+                        operand2 = temp.valueOf();
+                    }
+                }
+
+                operand1_split = Array.from(String(operand1), Number);
+                operand2_split = Array.from(String(operand2), Number);
+
+                // Handle splitting the font
+                if (splitFont == '1') {
+                    if ((numRange == '1') || (numRange == '2')) {
+                        if (operand1 > operand2) {
+                            document.getElementById('operand1').style.fontFamily = 'Dotless';
+                            document.getElementById('operand2').style.fontFamily = 'Touchfont';
+                        } else {
+                            document.getElementById('operand2').style.fontFamily = 'Dotless';
+                            document.getElementById('operand1').style.fontFamily = 'Touchfont';
+                        }
+                    } else if ((numRange == '3') || (numRange == '4')) {
+                        if (operand1_split[0] > operand2_split[0]) {
+                            document.getElementById('operand1_span1').style.fontFamily = 'Dotless';
+                            document.getElementById('operand2_span1').style.fontFamily = 'Touchfont';
+                        } else {
+                            document.getElementById('operand1_span1').style.fontFamily = 'Touchfont';
+                            document.getElementById('operand2_span1').style.fontFamily = 'Dotless';
+                        }
+                        if (operand1_split[1] > operand2_split[1]) {
+                            document.getElementById('operand1_span2').style.fontFamily = 'Dotless';
+                            document.getElementById('operand2_span2').style.fontFamily = 'Touchfont';
+                        } else {
+                            document.getElementById('operand1_span2').style.fontFamily = 'Touchfont';
+                            document.getElementById('operand2_span2').style.fontFamily = 'Dotless';
+                        }
+                        if (numRange == '4') {
+                            if (operand1_split[2] > operand2_split[2]) {
+                                document.getElementById('operand1_span3').style.fontFamily = 'Dotless';
+                                document.getElementById('operand2_span3').style.fontFamily = 'Touchfont';
+                            } else {
+                                document.getElementById('operand1_span3').style.fontFamily = 'Touchfont';
+                                document.getElementById('operand2_span3').style.fontFamily = 'Dotless';
+                            }
+                        }
+                    }
+                }
+
+                // Make the equation show up on the screen
+                document.getElementById('operand2_operationspan').innerText = `${operation} `;
+                document.getElementById('operand1_span1').innerText = operand1_split[0].toString();
+                document.getElementById('operand2_span1').innerText = operand2_split[0].toString();
+                if (Number(numRange) > 2) {
+                    document.getElementById('operand1_span2').innerText = operand1_split[1].toString();
+                    document.getElementById('operand2_span2').innerText = operand2_split[1].toString();
+                    if (Number(numRange) > 3) {
+                        document.getElementById('operand1_span3').innerText = operand1_split[2].toString();
+                        document.getElementById('operand2_span3').innerText = operand2_split[2].toString();
+                    }
+                }
+
+                document.getElementById('num_input_1').value = '';
+                document.getElementById('num_input_2').value = '';
+                document.getElementById('num_input_3').value = '';
+                document.getElementById('num_input_4').value = '';
+                document.getElementById("body").style.opacity = 1; // Make everything visible again
+            }, 300);
+        } else {
+            var endtTime = new Date().getTime();
+
+            // Load the ending screen when 10 questions are up
+            document.getElementById('main').style.visibility = 'hidden';
+            document.getElementById('main').style.display = 'None';
+            document.getElementById('endtext').innerText = `Great job,\nYou got ${questionsCorrect} correct!`;
+            document.getElementById('end').style.visibility = 'visible';
+            document.getElementById("body").style.opacity = 1;
+
+            var currentDate = new Date();
+            var currentYear = currentDate.getFullYear().toString();
+            var currentMonth = ('00' + (currentDate.getMonth() + 1)).slice(-2);
+            var currentDay = ('00' + currentDate.getDate()).slice(-2);
+
+            var postData = {
+                'username': username,
+                'date': currentYear + currentMonth + currentDay,
+                'score': questionsCorrect.toString(),
+                'time': (Math.round((endtTime - startTime) / 1000)).toString(),
+                'number_range': numRange,
+                'subtraction': subtraction,
+                'split_font': splitFont
+            };
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', postURL);
+            xhr.send(JSON.stringify(postData));
+        }
+    }
+
+    // Check if answer is correct and load new question
+    function submitClick() {
+        inputVal_1 = document.getElementById("num_input_1").value;
+        inputVal_2 = document.getElementById("num_input_2").value;
+        inputVal_3 = document.getElementById("num_input_3").value;
+        inputVal_4 = document.getElementById("num_input_4").value;
+        inputVal = Number(inputVal_1 + inputVal_2 + inputVal_3 + inputVal_4);
+
+        if (operation == '+') {
+            if (inputVal == operand1 + operand2) {
+                questionsCorrect++;
+            }
+        } else if (operation == '-') {
+            if (inputVal == operand1 - operand2) {
+                questionsCorrect++;
+            }
+        }
+        questionsAnswered++;
+        nextQuestion();
+    }
+
+    // Do things when page is loaded
+    window.onload = function() {
+        if (numRange == '3') {
+            document.querySelector(':root').style.setProperty('--inputMargin', '15%');
+        }
+
+        if ((numRange == '1') || (numRange == '2')) {
+            document.getElementById('num_input_1').style.visibility = 'hidden';
+            document.getElementById('num_input_4').style.visibility = 'hidden';
+            if (subtraction == '1') {
+                document.getElementById('num_input_2').style.visibility = 'hidden';
+            }
+        } else if (numRange == '3') {
+            document.getElementById('num_input_4').style.visibility = 'hidden';
+            if (subtraction == '1') {
+                document.getElementById('num_input_1').style.visibility = 'hidden';
+            }
+        } else if ((numRange == '4') && (subtraction == '1')) {
+            document.getElementById('num_input_1').style.visibility = 'hidden';
+        }
+
+        startTime = new Date().getTime();
+        if (bgOption == '1') {
+            document.querySelector(':root').style.setProperty('--bgColor', '#ffff00');
+        } else if (bgOption == '0') {
+            document.querySelector(':root').style.setProperty('--bgColor', 'white');
+        }
+        nextQuestion();
+    };
+
+</script>
